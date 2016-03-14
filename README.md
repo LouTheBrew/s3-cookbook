@@ -1,2 +1,4 @@
-# s3-cookbook
-A cookbook for amazon s3
+# s3
+
+TODO: Enter the cookbook description here.
+
