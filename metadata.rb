@@ -7,3 +7,4 @@ long_description 'Installs/Configures s3'
 version '0.1.0'
 
 depends 'poise'
+depends 'python'
