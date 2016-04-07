@@ -1,0 +1,80 @@
+#!<%=@context[:interpreter]%>
+"""S3Tool.
+Usage:
+  s3 test
+  s3 upload <bucket> <path> <key> <region> <log>
+  s3 download <bucket> <path> <key> <region> <log>
+  s3 delete <bucket> <key> <region> <log>
+"""
+import boto3
+import os
+from docopt import docopt
+import unittest
+import json
+
+
+def log(msg, outf):
+  # Open in write append mode
+  with open(outf, 'wa') as f:
+    f.write(json.dumps(msg))
+
+class S3Connector(object):
+  def connect(self, region, strategy='resource'):
+    if strategy is 'resource':
+      return boto3.resource('s3', region_name=region)
+    if strategy is 'client':
+      return boto3.client('s3', region_name=region)
+
+
+class S3Interface(object):
+  def __init__(self, region):
+    self.region = region
+    self.connector = S3Connector()
+    self.connection = self.connector.connect(self.region)
+
+  def upload(self, **kwargs):
+    return self.connection.Bucket(kwargs['bucket']).upload_file(kwargs['path'], kwargs['key'])
+
+  def download(self, **kwargs):
+    self.connection.meta.client.download_file(kwargs['bucket'], kwargs['key'], kwargs['path'])
+
+  def delete(self, **kwargs):
+    self.connection = self.connector.connect(self.region, strategy='client')
+    self.connection.delete_object(Bucket=kwargs['bucket'], Key=kwargs['key'])
+
+class S3CLI(object):
+    def __init__(self):
+        self.args = docopt(__doc__)
+        self.interface = S3Interface(self.getArgs()['<region>'])
+
+    def getArgs(self):
+        return self.args
+
+    def run(self):
+        if self.getArgs()['test']:
+            print 'PONG'
+        if self.getArgs()['upload']:
+            log(self.interface.upload(
+                bucket=self.getArgs()['<bucket>'],
+                path=self.getArgs()['<path>'],
+                key=self.getArgs()['<key>']
+                ),
+                self.getArgs()['<log>'])
+        if self.args['download']:
+            log(self.interface.download(
+                bucket=self.getArgs()['<bucket>'],
+                path=self.getArgs()['<path>'],
+                key=self.getArgs()['<key>']
+                ),
+                self.getArgs()['<log>'])
+        if self.args['delete']:
+            log(self.interface.delete(
+                bucket=self.getArgs()['<bucket>'],
+                key=self.getArgs()['<key>'],
+                ),
+                self.getArgs()['<log>'])
+
+def main():
+  S3CLI().run()
+if __name__ == '__main__':
+    main()
