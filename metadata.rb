@@ -4,7 +4,7 @@ maintainer_email 'LouTheBrew@gmail.com'
 license 'MIT'
 description 'provides s3 resources'
 long_description 'provides s3 resources'
-version '0.1.1'
+version '1.0.0'
 
 depends 'poise'
 depends 'poise-python'
