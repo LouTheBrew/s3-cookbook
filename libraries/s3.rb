@@ -10,101 +10,62 @@ module S3
     actions   :upload, :download, :delete
     attribute :name, name_attribute: true, kind_of: String
     attribute :path, kind_of: String, required: true
+    attribute :key, kind_of: String, required: true
     attribute :bucket, kind_of: String, required: true
-    attribute :venv, kind_of: String, default: '/chef/apps/virtualenvs/s3/'
+    attribute :env_dir, kind_of: String, default: '/chef/apps/virtualenvs/s3/'
+    attribute :python_bin, kind_of: String, default: '/chef/apps/virtualenvs/s3/bin/python'
     attribute :pip_packages, kind_of: Array, default: %w{boto3 docopt}
     attribute :template, kind_of: String, default: 's3.py.erb'
-    attribute :out, kind_of: String, default: '/tmp/s3.log'
+    attribute :logging, kind_of: [TrueClass, FalseClass], default: true
+    attribute :log_dir, kind_of: String, default: '/var/log/s3/'
+    attribute :log_path, kind_of: String, default: '/var/log/s3/s3.log'
+    attribute :module_name, kind_of: String, default: 's3'
+    attribute :module_path, kind_of: String, default: '/chef/apps/virtualenvs/s3/bin/s3.py'
+    attribute :region, kind_of: String, default: 'us-east-1'
   end
   class Provider < Chef::Provider
     include Poise
     provides :s3
-    def access
-      notifying_block do
-        yield
-      end
-    end
-    def venv
-      access do
-        return new_resource.venv
-      end
-    end
-    def name
-      access do
-        return new_resource.name
-      end
-    end
-    def venv
-      "#{self.venv}"
-    end
-    def interpreter
-      "#{self.venv}/bin/python"
-    end
-    def s3pythonbin
-      "#{self.venv}s3/bin/s3.py"
-    end
-    def responses
-      "#{self.venv}s3/bin/s3/responses/"
-    end
     def given_the_givens
-        unless ::File.exists? self.venv
-          self.create_custom_python_env self.venv
-        end
-        template self.s3pythonbin do
-          source new_resource.template
-          cookbook 's3'
-          variables :context => {:interpreter => "#{self.interpreter}"}
-          mode 0777
-        end
-        yield
-    end
-    def s3(method, args)
-      case method
-      when :upload
-        bash method.to_s do
-          code <<-EOH
-          #{args[:bin]} #{method.to_s} #{args[:bucket]} #{args[:path]} #{args[:key]} #{args[:out]}
-          EOH
-        end
-      when :download
-        bash method.to_s do
-          code <<-EOH
-          #{args[:bin]} #{method.to_s} #{args[:bucket]} #{args[:path]} #{args[:key]} #{args[:out]}
-          EOH
-        end
-      when :delete
-        bash method.to_s do
-          code <<-EOH
-          #{args[:bin]} #{method.to_s} #{args[:bucket]} #{args[:path]} #{args[:key]} #{args[:out]}
-          EOH
-        end
-      end
-    end
-    def create_custom_python_env(env)
-      notifying_block do
-        include_recipe 'python'
-        directory env do
+      [new_resource.env_dir, new_resource.log_dir].each do |dir|
+        directory dir do
           recursive true
         end
-        python_virtualenv env
-        new_resource.pip_packages.each do |pkg|
-          python_pip pkg do
-            virtualenv env
-          end
+      end
+      python_runtime '2'
+      python_virtualenv new_resource.env_dir
+      new_resource.pip_packages.each do |mod|
+        python_package mod do
+          virtualenv new_resource.env_dir
         end
       end
+      template new_resource.module_path do
+        source new_resource.template
+        variables :context => {
+          :interpreter => new_resource.python_bin
+        }
+      end
+      yield
+    end
+    def s3_do(binary, command, bucket, path, key, region, log)
+      python_execute "#{binary} #{command} #{bucket} #{path} #{key} #{region} #{log}"
+    end
+    def s3_delete(binary, command, bucket, key, region, log)
+      python_execute "#{binary} #{command} #{bucket} #{key} #{region} #{log}"
     end
     def action_upload
-      notifying_block do
-        given_the_givens do
-          s3 :upload,{
-              :bin => self.s3pythonbin,
-              :bucket => new_resource.bucket,
-              :path => new_resource.path,
-              :key => new_resource.name,
-              :out => new_resource.out
-          }
-        end
+      given_the_givens do
+        s3_do(new_resource.module_path, 'upload', new_resource.bucket, new_resource.path, new_resource.key, new_resource.region, new_resource.log_path)
+      end
+    end
+    def action_download
+      given_the_givens do
+        s3_do(new_resource.module_path, 'download', new_resource.bucket, new_resource.path, new_resource.key, new_resource.region, new_resource.log_path)
+      end
+    end
+    def action_delete
+      given_the_givens do
+        s3_delete(new_resource.module_path, 'delete', new_resource.bucket, new_resource.key, new_resource.key, new_resource.log_path)
       end
     end
   end

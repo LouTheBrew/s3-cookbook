@@ -1,5 +1,20 @@
-#
-# Cookbook Name:: s3
-# Recipe:: default
-#
-# Copyright (c) 2016 The Authors, All Rights Reserved.
+file '/tmp/testfile' do
+  content 'iamatestfileiamonlyatestfileifiweremorethanatestyouwouldbeintroublerightnowbutyouarentbecauseimatest'
+end
+s3 'upload_a_test' do
+  action :upload
+  path '/tmp/testfile'
+  key 'testfile'
+  bucket 'anaplan-devops'
+end
+s3 'download_a_test' do
+  action :download
+  path '/tmp/testfileisback'
+  key 'testfile'
+  bucket 'anaplan-devops'
+end
+#s3 'delete_the_test' do
+#  action :delete
+#  key 'testfile'
+#  bucket 'anaplan-devops'
+#end
