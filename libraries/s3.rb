@@ -9,7 +9,7 @@ module S3
     provides  :s3
     actions   :upload, :download, :delete
     attribute :name, name_attribute: true, kind_of: String
-    attribute :local_cookbook_name, kind_of: String, default: 's3'
+    attribute :local_cookbook_name, kind_of: String, default: 'poise-s3'
     attribute :path, kind_of: String, required: true
     attribute :key, kind_of: String, required: true
     attribute :bucket, kind_of: String, required: true
@@ -46,6 +46,7 @@ module S3
           :interpreter => new_resource.python_bin
         }
         cookbook new_resource.local_cookbook_name
+        sensitive true
       end
       yield
     end

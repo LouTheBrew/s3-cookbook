@@ -1,10 +1,10 @@
-name 's3'
+name 'poise-s3'
 maintainer 'Luis Felipe Moura Pereira De Siqueira'
 maintainer_email 'LouTheBrew@gmail.com'
 license 'MIT'
 description 'provides s3 resources'
 long_description 'provides s3 resources'
-version '1.0.0'
+version '0.0.2'
 
 depends 'poise'
 depends 'poise-python'

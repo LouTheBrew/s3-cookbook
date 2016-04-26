@@ -1,5 +1,5 @@
 file '/tmp/testfile' do
-  content 'iamatestfileiamonlyatestfileifiweremorethanatestyouwouldbeintroublerightnowbutyouarentbecauseimatest'
+  content 'testing'
 end
 s3 'upload_a_test' do
   action :upload
@@ -13,6 +13,7 @@ s3 'download_a_test' do
   key 'testfile'
   bucket 'anaplan-devops'
 end
+package 'httpd'
 #s3 'delete_the_test' do
 #  action :delete
 #  key 'testfile'

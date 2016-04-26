@@ -27,7 +27,7 @@ platforms:
       image_id: <%= ENV['KITCHEN_EC2_AMI'] %>
 
 suites:
-  - name: default
+  - name: smoke
     run_list:
-      - recipe[s3::default]
+      - recipe[poise-s3::default]
     attributes:
