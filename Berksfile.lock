@@ -1,18 +1,9 @@
 DEPENDENCIES
-  poise-s3
+  s3-cookbook
     path: .
     metadata: true
 
 GRAPH
-  poise (2.7.0)
-  poise-archive (1.1.2)
-    poise (~> 2.6)
-  poise-languages (1.4.0)
-    poise (~> 2.5)
-    poise-archive (~> 1.0)
-  poise-python (1.2.1)
-    poise (~> 2.0)
-    poise-languages (~> 1.2)
-  poise-s3 (0.0.2)
+  poise (2.7.1)
+  s3-cookbook (0.1.1)
     poise (>= 0.0.0)
-    poise-python (>= 0.0.0)

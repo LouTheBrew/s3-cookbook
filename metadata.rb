@@ -1,10 +1,9 @@
-name 'poise-s3'
-maintainer 'Luis Felipe Moura Pereira De Siqueira'
-maintainer_email 'LouTheBrew@gmail.com'
-license 'MIT'
-description 'provides s3 resources'
-long_description 'provides s3 resources'
-version '0.0.2'
+name 's3-cookbook'
+maintainer 'jobvite ops'
+maintainer_email 'operations@jobvite.com'
+license 'all_rights'
+description 'Installs/Configures s3-cookbook'
+long_description 'Installs/Configures s3-cookbook'
+version ::File.read('VERSION').strip
 
 depends 'poise'
-depends 'poise-python'
