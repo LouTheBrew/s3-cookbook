@@ -1,9 +1,9 @@
 DEPENDENCIES
-  s3-cookbook
+  poise-s3
     path: .
     metadata: true
 
 GRAPH
   poise (2.7.1)
-  s3-cookbook (0.1.13)
+  poise-s3 (0.1.14)
     poise (>= 0.0.0)

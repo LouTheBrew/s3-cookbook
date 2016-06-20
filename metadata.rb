@@ -1,4 +1,4 @@
-name 's3-cookbook'
+name 'poise-s3'
 maintainer 'ops'
 maintainer_email 'operations@jjos.com'
 license 'all_rights'
