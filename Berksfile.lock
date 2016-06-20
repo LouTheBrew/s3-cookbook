@@ -1,0 +1,9 @@
+DEPENDENCIES
+  s3-cookbook
+    path: .
+    metadata: true
+
+GRAPH
+  poise (2.7.1)
+  s3-cookbook (0.1.12)
+    poise (>= 0.0.0)
