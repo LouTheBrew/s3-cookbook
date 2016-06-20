@@ -5,5 +5,5 @@ DEPENDENCIES
 
 GRAPH
   poise (2.7.1)
-  s3-cookbook (0.1.7)
+  s3-cookbook (0.1.8)
     poise (>= 0.0.0)
