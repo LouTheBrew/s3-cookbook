@@ -5,5 +5,5 @@ DEPENDENCIES
 
 GRAPH
   poise (2.7.1)
-  poise-s3 (0.1.14)
+  poise-s3 (0.1.15)
     poise (>= 0.0.0)
