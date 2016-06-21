@@ -1,4 +1,4 @@
-name 'poise-s3'
+name ::File.read('NAME').strip
 maintainer 'ops'
 maintainer_email 'operations@jjos.com'
 license 'all_rights'
