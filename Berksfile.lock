@@ -4,6 +4,6 @@ DEPENDENCIES
     metadata: true
 
 GRAPH
-  eldus-s3 (0.1.0)
+  eldus-s3 (0.1.22)
     poise (>= 0.0.0)
   poise (2.7.1)
