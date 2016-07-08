@@ -1,9 +1,9 @@
-name ::File.read('NAME').strip
-maintainer 'ops'
-maintainer_email 'operations@jjos.com'
+name 'eldus-s3'
+maintainer 'Luis Felipe Moura Pereira De Siqueira'
+maintainer_email 'louthebrew@gmail.com'
 license 'all_rights'
-description 'Installs/Configures s3-cookbook'
-long_description 'Installs/Configures s3-cookbook'
-version ::File.read('VERSION').strip
+description 'Provides an s3 resource interface'
+long_description 'Provides an s3 resource interface'
+version '0.1.0'
 
 depends 'poise'
