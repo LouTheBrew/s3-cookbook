@@ -1,9 +1,9 @@
 DEPENDENCIES
-  poise-s3
+  eldus-s3
     path: .
     metadata: true
 
 GRAPH
-  poise (2.7.1)
-  poise-s3 (0.1.19)
+  eldus-s3 (0.1.0)
     poise (>= 0.0.0)
+  poise (2.7.1)
